@@ -3,13 +3,16 @@ var city = $("#city-name");
 var date = $("#date");
 var temperature = $("#temp")
 
-
-
-
 // Fetch request for Charlotte NC
 var lat = 35.227085;
 var lon = -80.843124;
+
+// Arrays to store the data for 5-day forecast for the day, temperature, humidity, and wind
 var next5days = [];
+var icons = [];
+var temps = [];
+var winds = [];
+var humidities = [];
 
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
 var currentDate = dayjs().format("MMM DD, YYYY");;
@@ -22,9 +25,7 @@ fetch("https://api.openweathermap.org/data/2.5/forecast/?lat="+lat+"&lon="+lon+"
     })
     .then(function (data) {
         console.log(data);
-        console.log(data.list[0])
-
-
+        
         city.text("City: "+data.city.name);
         // console.log(city);
 
@@ -34,15 +35,34 @@ fetch("https://api.openweathermap.org/data/2.5/forecast/?lat="+lat+"&lon="+lon+"
         // Figure out the date situation
         // This for loop increased the i index by 8 each time - since we have 40 objects then we will get the 5 days like we were needing
         for (var i = 0; i < data.list.length; i+=8) {
-
+            // Date
             var date = dayjs.unix(data.list[i].dt).format("MMM DD, YYYY");
             next5days.push(date);
-            console.log(date);
+
+            // Icon
+            var icon = data.list[i].weather[0].icon;
+            icons.push(icon);
+
+            // Temperature
+            var temp = data.list[i].main.temp;
+            temps.push(temp);
+
+            //Wind
+            var wind = data.list[i].wind.speed;
+            winds.push(wind);
+
+            //Humidity
+            var humidity = data.list[i].main.humidity;
+            humidities.push(humidity);
         }
 
-        // For loop which will the date for the next 5 days
+        // One for loop which can iterate through all of the IDs and use this for all of the details needed in the cards
         for (var i = 0; i < next5days.length; i++) {
-            $("#fcst-day-"+i).text(next5days[i]);
+            $("#fcst-day-"+i).children(".day-header").text(next5days[i]);
+            $("#fcst-day-"+i).children(".icon").attr("src", "http://openweathermap.org/img/wn/"+icons[i]+"@2x.png");
+            $("#fcst-day-"+i).children(".temp").text("Temp: "+temps[i]);
+            $("#fcst-day-"+i).children(".wind").text("Wind Speed: "+winds[i]);
+            $("#fcst-day-"+i).children(".humidity").text("Humidity: "+humidities[i]);
         }
     })
 
