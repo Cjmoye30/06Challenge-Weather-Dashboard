@@ -1,0 +1,13 @@
+*{
+    border: .01px solid;
+}
+
+header {
+    background-color: olive;
+    height: 100px;
+    text-align: center;
+}
+
+.side-navbar {
+    height: 100vh;
+}
