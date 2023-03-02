@@ -19,7 +19,9 @@ var currentDate = dayjs().format("MMM DD, YYYY");;
 console.log(currentDate);
 
 // Fetch request for the weather data of the selected city
-fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" + lon + "&appid=" + key + "=imperial&cnt=40")
+
+function returnUserWeather (lat,lon) {
+    fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" + lon + "&appid=" + key + "=imperial&cnt=40")
     .then(function (response) {
         return response.json()
     })
@@ -65,35 +67,39 @@ fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" +
             $("#fcst-day-" + i).children(".humidity").text("Humidity: " + humidities[i]);
         }
     })
-
-// Create a fetch request to pull data based on the city selected, and then pass in the coordinates we received back into the URL to update the HTML accordingly
-// Create a button list element after submission
-
-$("#city-search-form").on("submit",handleCitySearch);
-
-function handleCitySearch (e){
-    e.preventDefault();
-
-    var cityInputEl = $("city-input");
-    console.log(cityInputEl);
 }
 
 
 
-var userCity = "San Diego";
-var userCountry = "";
 
-fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&US&limit=1&appid=" + key)
+// Create a fetch request to pull data based on the city selected, and then pass in the coordinates we received back into the URL to update the HTML accordingly
+// Create a button list element after submission
+
+
+function handleCitySearch(e) {
+    e.preventDefault();
+    userCity = $("#city-input").val();
+    console.log(userCity);
+    
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&US&limit=1&appid=" + key)
     .then(function (response) {
         return response.json()
     })
     .then(function (data) {
+        console.log("City: " +userCity+"\nLatitude: "+userLat+"\nLongitude: "+userLon);
         var userLat = data[0].lat;
         console.log("User Latitute: " + userLat);
 
         var userLon = data[0].lon;
         console.log("User Longitude: " + userLon);
+        
+        returnUserWeather(userLat, userLon);
     })
+}
+
+var form = $("#city-search-form");
+form.on("submit", handleCitySearch);
+
 
 // Add event listener for submit button which will then update the city name
 // Create an array for user values which are submitted
@@ -103,20 +109,40 @@ fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&US&limit=
 
 // Bonus - bring in an API to autocomplete for the cities
 
-
 var corpBuzzWord = $("#motivation");
-function corpBuzzWordGenerate (){
+function corpBuzzWordGenerate() {
     fetch('https://corporatebs-generator.sameerkumar.website/')
-    .then(function (response) {
-        return response.json()
-    })
-    .then(function (data) {
-        var test = data;
-        // $("#motivation").text("Today's Corporate Buzzword: " + data.phrase);
-        corpBuzzWord.text(data.phrase);
-    })
+        .then(function (response) {
+            return response.json()
+        })
+        .then(function (data) {
+            var test = data;
+            // $("#motivation").text("Today's Corporate Buzzword: " + data.phrase);
+            corpBuzzWord.text(data.phrase);
+        })
 }
 corpBuzzWordGenerate();
+
+var chuckQuote = $("#chuckQuote");
+function chuck(){
+    fetch("https://api.chucknorris.io/jokes/random")
+        .then(function (response) {
+            return response.json()
+        })
+        .then(function (data) {
+            console.log(data.value);
+            chuckQuote.text(data.value)
+        })
+}
+chuck();
+
+// fetch("")
+//     .then(function (response) {
+//         return response.json()
+//     })
+//     .then(function (data) {
+//         console.log(data)
+//     })
 
 
 

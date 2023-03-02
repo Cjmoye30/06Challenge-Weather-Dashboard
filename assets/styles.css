@@ -13,11 +13,11 @@ body {
 
 header {
     background-color: olive;
-    height: 100px;
     text-align: center;
+    padding: 20px 50px;
 }
 
-#motivation {
+span {
     font-weight: bold;
     font-style: italic;
     text-decoration: underline;
@@ -29,7 +29,7 @@ header {
 
 .card {
     margin: 50px 0px;
-    height: 400px;
+    height: 300px;
     width: 200px;
 }
 
