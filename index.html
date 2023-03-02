@@ -20,64 +20,71 @@
 
     <header>
         <h1>Cambric's Weather Dashboard</h1>
+        <p>Today's Corporate Buzzword: <span id="motivation"></span></p>
     </header>
 
     <main>
         <div class="container-fluid">
-            <div class="row">
+
+            <!-- Side Search bar for the user to select a city and then have it stored as a button while utilizing local storage -->
+            <div class="row side-searchbar">
                 <div class="col-2 side-navbar mx-1">
+
+                    <!-- May need to enter a country field selector as well -->
+                    <!-- Field to search for a city -->
                     <h2>Search for a City:</h2>
-                    <form action="submit">
-                        <input type="text" placeholder="Charlotte">
-                        <button type="submit">Search</button>
+                    <form id="city-search-form">
+                        <input id="city-input" class="form-input w-75" type="text" placeholder="Charlotte">
+                        <button id="city-submit" type="submit">Search</button>
                     </form>
                     <hr>
+
+                    <!-- Unordered list to keep the buttons of the previously entered cities -->
                     <ul>
                     </ul>
                 </div>
 
                 <div class="col-9">
                     <div class="row">
-                        <h3>Header for Current City</h3>
+                        <h3 id="city-name">Header for Current City</h3>
                     </div>
                     <div class="row forecast-5day d-flex justify-content-center">
                         <h4 id="forecast-header">5-Day Forecast:</h4>
-                        <div id="fcst-day-0" class="card col-lg-2 col-md-12 m-2 ">
+                        <div id="fcst-day-0" class="card col col-12 m-2 ">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-1" class="card col-lg-2 col-md-12 m-2 ">
+                        <div id="fcst-day-1" class="card col col-12 m-2 ">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-2" class="card col-lg-2 col-md-12 m-2 ">
+                        <div id="fcst-day-2" class="card col col-12 m-2 ">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-3" class="card col-lg-2 col-md-12 m-2 ">
+                        <div id="fcst-day-3" class="card col col-12 m-2 ">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-4" class="card col-lg-2 col-md-12 m-2 ">
+                        <div id="fcst-day-4" class="card col col-12 m-2 ">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-
                     </div>
                 </div>
             </div>
