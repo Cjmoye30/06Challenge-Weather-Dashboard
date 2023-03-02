@@ -1,5 +1,5 @@
 *{
-    border: .01px solid;
+    /* border: .01px solid; */
 }
 
 main {
@@ -17,6 +17,12 @@ header {
     text-align: center;
 }
 
+#motivation {
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: underline;
+}
+
 .side-navbar {
     height: 100vh;
 }
@@ -24,4 +30,9 @@ header {
 .card {
     margin: 50px 0px;
     height: 400px;
+}
+
+.icon {
+    height: 50px;
+    width: 50px;
 }
