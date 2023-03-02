@@ -26,9 +26,9 @@ function returnUserWeather (lat,lon) {
         return response.json()
     })
     .then(function (data) {
-        console.log(data);
+        // console.log(data);
 
-        city.text("Weather for: " + data.city.name);
+        // city.text("Weather for: " + data.city.name +", " +data.city.country);
         // console.log(city);
 
         temperature.text("Current Temperature: " + data.list[0].main.temp);
@@ -69,37 +69,62 @@ function returnUserWeather (lat,lon) {
     })
 }
 
-
-
-
 // Create a fetch request to pull data based on the city selected, and then pass in the coordinates we received back into the URL to update the HTML accordingly
 // Create a button list element after submission
 
+var cityArr = [];
+
+function createButtons (){
+    $("#buttonList").text("");
+    for (var i = 0; i < cityArr.length; i++) {
+        // console.log(cityArr[i]);
+        var cityListEl = $("<button>").text(cityArr[i]).attr("class", "btn cityButton");
+        localStorage.setItem("cities", JSON.stringify(cityArr));
+        $("#buttonList").append(cityListEl);
+    }
+}
+
+
+$(function (){
+    var storedCities = JSON.parse(localStorage.getItem("cities"));
+    console.log(storedCities.length);
+
+    for(var i = 0; i < storedCities.length; i++) {
+        var buttonEl = $("<button>").text(storedCities[i]).attr("class", "btn cityButton");
+        $("#buttonList").append(buttonEl);
+    }
+})
 
 function handleCitySearch(e) {
     e.preventDefault();
-    userCity = $("#city-input").val();
-    console.log(userCity);
+    // Take the user value and place that into an array - so that we can eventually use the array to create a list of buttons of recent searches
     
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&US&limit=1&appid=" + key)
+    userCity = $("#city-input").val();
+    cityArr.push(userCity);
+    createButtons();
+    
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
     .then(function (response) {
         return response.json()
     })
     .then(function (data) {
-        console.log("City: " +userCity+"\nLatitude: "+userLat+"\nLongitude: "+userLon);
+        console.log(data);
+        city.text(data[0].name +", "+data[0].state+" - "+data[0].country);
         var userLat = data[0].lat;
         console.log("User Latitute: " + userLat);
-
+        
         var userLon = data[0].lon;
         console.log("User Longitude: " + userLon);
         
+        console.log("City: " +userCity+"\nLatitude: "+userLat+"\nLongitude: "+userLon);
         returnUserWeather(userLat, userLon);
     })
 }
 
+
+
 var form = $("#city-search-form");
 form.on("submit", handleCitySearch);
-
 
 // Add event listener for submit button which will then update the city name
 // Create an array for user values which are submitted
@@ -130,11 +155,13 @@ function chuck(){
             return response.json()
         })
         .then(function (data) {
-            console.log(data.value);
+            // console.log(data.value);
             chuckQuote.text(data.value)
         })
 }
 chuck();
+
+// template for a fetch request:
 
 // fetch("")
 //     .then(function (response) {
