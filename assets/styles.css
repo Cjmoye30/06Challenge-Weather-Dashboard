@@ -30,6 +30,7 @@ header {
 .card {
     margin: 50px 0px;
     height: 400px;
+    width: 200px;
 }
 
 .icon {
