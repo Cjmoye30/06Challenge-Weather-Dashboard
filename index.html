@@ -28,20 +28,20 @@
         <div class="container-fluid">
 
             <!-- Side Search bar for the user to select a city and then have it stored as a button while utilizing local storage -->
-            <div class="row side-searchbar">
+            <div class="row">
                 <div class="col-2 side-navbar mx-1">
 
                     <!-- May need to enter a country field selector as well -->
                     <!-- Field to search for a city -->
                     <h2>Search for a City:</h2>
                     <form id="city-search-form">
-                        <input id="city-input" class="form-input w-75" type="text" placeholder="Charlotte">
-                        <button id="city-submit" type="submit">Search</button>
+                        <input id="city-input" class="form-input" type="text" placeholder="Charlotte">
+                        <button id="city-submit" class="btn" type="submit">Search</button>
                     </form>
                     <hr>
 
                     <!-- Unordered list to keep the buttons of the previously entered cities -->
-                    <ul>
+                    <ul id="buttonList">
                     </ul>
                 </div>
 
