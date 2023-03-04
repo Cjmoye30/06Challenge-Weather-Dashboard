@@ -99,10 +99,13 @@ $(function () {
 
     if (localStorage.length === 0) {
         // run the function on default for Charlotte
+        searchCity("Charlotte")
         console.log("Local storae is empty!")
     } else {
-
         var storedCities = JSON.parse(localStorage.getItem("cities"));
+
+        // On document load - pulling the weather for the last searched city
+        searchCity(storedCities[storedCities.length-1]);
 
         // Reinitialize the cityArray so that the buttons generate on load and do not get replaced with an empty array
         cityArr = JSON.parse(localStorage.getItem("cities"));
@@ -206,3 +209,6 @@ function searchCity(xCity) {
             alert(err);
         })
 }
+
+// if user storage is zero, run for Charlotte
+// if there is existing user storage, pull the last index
