@@ -7,32 +7,35 @@ var temperature = $("#temp")
 var lat = 35.227085;
 var lon = -80.843124;
 
-// Arrays to store the data for 5-day forecast for the day, temperature, humidity, and wind
-var next5days = [];
-var icons = [];
-var temps = [];
-var winds = [];
-var humidities = [];
-
+var cityArr = [];
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
 var currentDate = dayjs().format("MMM DD, YYYY");;
 console.log(currentDate);
 
-// Fetch request for the weather data of the selected city
 
 function returnUserWeather(lat, lon) {
+
+    // Arrays to store the data for 5-day forecast for the day, temperature, humidity, and wind
+    // Reset the arrays to blank so the info for the new city will be displayed
+    var next5days = [];
+    var icons = [];
+    var temps = [];
+    var winds = [];
+    var humidities = [];
+
     fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" + lon + "&appid=" + key + "=imperial&cnt=40")
         .then(function (response) {
             return response.json()
         })
         .then(function (data) {
-            // console.log(data);
+            console.log(data);
 
             // city.text("Weather for: " + data.city.name +", " +data.city.country);
             // console.log(city);
 
             temperature.text("Current Temperature: " + data.list[0].main.temp);
             console.log(data.list[0].main.temp);
+            
 
             // Figure out the date situation
             // This for loop increased the i index by 8 each time - since we have 40 objects then we will get the 5 days like we were needing
@@ -69,27 +72,40 @@ function returnUserWeather(lat, lon) {
         })
 }
 
-
-var cityArr = [];
-
 function createButtons() {
     $("#buttonList").text("");
     for (var i = 0; i < cityArr.length; i++) {
         // console.log(cityArr[i]);
         var cityListEl = $("<button>").text(cityArr[i]).attr("class", "btn cityButton");
+
+
         localStorage.setItem("cities", JSON.stringify(cityArr));
         $("#buttonList").append(cityListEl);
     }
 }
 
-
 $(function () {
 
+    // Event Delegation - since the city buttons are created after the documents lods, then we have to use event delegation and put the event listered to the entire list since that is already created. Then, we can capture the value which is clicked for items created dynamically.
+    $("#buttonList").click(function (e) {
+        // Get the value of the previous city buttons and store that
+        // On click - pass this back into the handleCitySearch function and fetch the data
+        // console.log(e.target.innerHTML);
+        userCity = e.target.innerHTML;
+        console.log(userCity);
+        searchCity(userCity);
+
+    })
+
     if (localStorage.length === 0) {
+        // run the function on default for Charlotte
+        searchCity("Charlotte")
         console.log("Local storae is empty!")
     } else {
-
         var storedCities = JSON.parse(localStorage.getItem("cities"));
+
+        // On document load - pulling the weather for the last searched city
+        searchCity(storedCities[storedCities.length-1]);
 
         // Reinitialize the cityArray so that the buttons generate on load and do not get replaced with an empty array
         cityArr = JSON.parse(localStorage.getItem("cities"));
@@ -110,8 +126,9 @@ function handleCitySearch(e) {
     // If none of these condtions returns true, then we proceed to fetch the request with the user city
     if (userCity === "") {
         alert("Please enter a city!")
+
         return
-    } else if(cityArr.includes(userCity)) {
+    } else if (cityArr.includes(userCity)) {
         alert("That city already exists!")
         return
     }
@@ -121,6 +138,7 @@ function handleCitySearch(e) {
             return response.json()
         })
         .then(function (data) {
+            console.log(data);
 
             cityArr.push(userCity);
             createButtons();
@@ -142,8 +160,6 @@ function handleCitySearch(e) {
             alert("Please enter a valid name!");
         })
 }
-
-
 
 var form = $("#city-search-form");
 form.on("submit", handleCitySearch);
@@ -176,15 +192,23 @@ function chuck() {
 }
 chuck();
 
-// template for a fetch request:
+function searchCity(xCity) {
+    userCity = xCity;
+    city.text(userCity);
+    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
+        .then(function (response) {
+            return response.json()
+        })
+        .then(function (data) {
+            city.text(data[0].name + ", " + data[0].state + " - " + data[0].country);
+            var userLat = data[0].lat;
+            var userLon = data[0].lon;
+            returnUserWeather(userLat, userLon);
+        })
+        .catch(function (err) {
+            alert(err);
+        })
+}
 
-// fetch("")
-//     .then(function (response) {
-//         return response.json()
-//     })
-//     .then(function (data) {
-//         console.log(data)
-//     })
-
-
-
+// if user storage is zero, run for Charlotte
+// if there is existing user storage, pull the last index
