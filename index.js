@@ -11,7 +11,7 @@ var cityArr = [];
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
 var currentDate = dayjs().format("MMM DD, YYYY");;
 console.log(currentDate);
-
+console.log(dayjs().add(1, "day").format("MMM DD, YYYY"));
 
 function returnUserWeather(lat, lon) {
 
@@ -29,6 +29,14 @@ function returnUserWeather(lat, lon) {
         })
         .then(function (data) {
             console.log(data);
+            console.log(dayjs.unix(data.list[0].dt));
+
+            var days = data.list.filter(function(day) {
+                return day.dt_txt.includes("2023-03-05");
+            })
+
+            console.log(days);
+
 
             // city.text("Weather for: " + data.city.name +", " +data.city.country);
             // console.log(city);
