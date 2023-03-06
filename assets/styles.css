@@ -1,11 +1,16 @@
 *{
-    /* border: .01px solid; */
+    border: .01px solid;
     box-sizing: border-box;
 }
 
 main {
     max-width: 1700px;
     margin: 0 auto;
+}
+
+.container-fluid {
+    width: 90%;
+
 }
 
 body {
@@ -41,8 +46,11 @@ span {
 }
 
 /* Side Search Bar */
-#city-submit {
-    border: 1px solid;
+#city-search-form {
+    width: 100%;
+}
+
+#city-input, #city-submit {
     width: 100%;
 }
 
@@ -53,7 +61,7 @@ span {
     padding: 0;
 }
 
-.cityButton {
+.btn {
     margin: 10px 0;
     border: 1px solid;
     background-color: olivedrab;
@@ -61,5 +69,5 @@ span {
 }
 
 #clearStorage {
-    /* display: none; */
+    display: none;
 }

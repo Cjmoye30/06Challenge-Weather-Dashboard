@@ -3,10 +3,6 @@ var city = $("#city-name");
 var date = $("#date");
 var temperature = $("#temp")
 
-// Fetch request for Charlotte NC
-var lat = 35.227085;
-var lon = -80.843124;
-
 var cityArr = [];
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
 // var currentDate = dayjs().format("MMM DD, YYYY");
@@ -64,9 +60,7 @@ function returnUserWeather(lat, lon) {
 
             // Looping through the next 5 days
             for (var i = 0; i <myArr.length; i++) {
-                // console.log(myArr[1][0]);
-                // $("#fcst-day-" + i).children(".day-header").text(dayjs.unix(myArr[i][0].dt).format("MMM DD, YYYY"));
-                $("#fcst-day-" + i).children(".day-header").text(dayjs.unix(myArr[i][0].dt));
+                $("#fcst-day-" + i).children(".day-header").text(dayjs(myArr[i][0].dt_txt).format("ddd MMM DD, YYYY"));
                 $("#fcst-day-" + i).children(".temp").text("Temperature: "+myArr[i][0].main.temp);
                 $("#fcst-day-" + i).children(".wind").text("Wind Speed"+myArr[i][0].wind.speed);
                 $("#fcst-day-" + i).children(".humidity").text("Humidity: "+myArr[i][0].main.humidity);
@@ -140,6 +134,8 @@ $(function () {
         searchCity("Charlotte")
         console.log("Local storae is empty!")
     } else {
+        $("#clearStorage").attr("style", "display: block");
+
         var storedCities = JSON.parse(localStorage.getItem("cities"));
 
         // On document load - pulling the weather for the last searched city
@@ -228,7 +224,7 @@ function chuck() {
             chuckQuote.text(data.value)
         })
 }
-chuck();
+// chuck();
 
 function searchCity(xCity) {
     userCity = xCity;
@@ -255,9 +251,4 @@ $("#clearStorage").click(function(){
     localStorage.clear();
     createButtons();
     $("#clearStorage").attr("style", "display: none");
-
 })
-
-
-// if user storage is zero, run for Charlotte
-// if there is existing user storage, pull the last index
