@@ -1,5 +1,5 @@
 *{
-    border: .01px solid;
+    /* border: .01px solid; */
     box-sizing: border-box;
 }
 
@@ -58,4 +58,8 @@ span {
     border: 1px solid;
     background-color: olivedrab;
     color: whitesmoke;
+}
+
+#clearStorage {
+    /* display: none; */
 }
