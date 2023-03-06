@@ -9,9 +9,11 @@ var lon = -80.843124;
 
 var cityArr = [];
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
-var currentDate = dayjs().format("MMM DD, YYYY");;
-console.log(currentDate);
+// var currentDate = dayjs().format("MMM DD, YYYY");
+var currentDate = dayjs().format("YYYY-MM-DD");
 
+console.log(currentDate);
+console.log(dayjs().add(1, "day").format("YYYY-MM-DD"));
 
 function returnUserWeather(lat, lon) {
 
@@ -23,52 +25,86 @@ function returnUserWeather(lat, lon) {
     var winds = [];
     var humidities = [];
 
+
     fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" + lon + "&appid=" + key + "=imperial&cnt=40")
         .then(function (response) {
             return response.json()
         })
         .then(function (data) {
             console.log(data);
+            console.log(dayjs.unix(data.list[0].dt));
 
-            // city.text("Weather for: " + data.city.name +", " +data.city.country);
-            // console.log(city);
+            // Filters data down to only the current day and nothing else
+            // same logic can be used for the next 5 days
+            // var daysFilter = data.list.filter(function(day) {
+            //     return day.dt_txt.includes(currentDate);
+            // })
+            // console.log(daysFilter);
 
-            temperature.text("Current Temperature: " + data.list[0].main.temp);
-            console.log(data.list[0].main.temp);
-            
+            var myArr = [];
+            // Get data for all 6 days individually and put the data into a for loop
+            for (var i = 0; i <=5; i++) {
+                var dayAdd = dayjs().add(i, "day").format("YYYY-MM-DD");
+                var dayData = data.list.filter(function(day) {
+                    return day.dt_txt.includes(dayAdd);
+                })
+                myArr.push(dayData);
+            }
+            console.log(myArr);
+
+            // looping through the newly created array and displaying the content as HTML
+            // console.log(dayjs.unix(myArr[1][1].dt).format("MMMM DD, YYYY"));
+
+            // Displaying content only for the current day of the selected city
+            // $(".curr-day-header").text(dayjs.unix(myArr[0][0].dt).format("MMMM DD, YYYY"));
+            // $(".curr-icon").attr("src", "http://openweathermap.org/img/wn/" + myArr[0][0].weather[0].icon + "@2x.png");
+            // $(".curr-temp").text("Current Temperature: "+myArr[0][0].main.temp);
+            // $(".curr-wind").text("Current Wind Speed: "+myArr[0][0].wind.speed);
+            // $(".curr-humidity").text("Current Humidity: "+myArr[0][0].main.humidity);
+
+            // Looping through the next 5 days
+            for (var i = 0; i <myArr.length; i++) {
+                // console.log(myArr[1][0]);
+                // $("#fcst-day-" + i).children(".day-header").text(dayjs.unix(myArr[i][0].dt).format("MMM DD, YYYY"));
+                $("#fcst-day-" + i).children(".day-header").text(dayjs.unix(myArr[i][0].dt));
+                $("#fcst-day-" + i).children(".temp").text("Temperature: "+myArr[i][0].main.temp);
+                $("#fcst-day-" + i).children(".wind").text("Wind Speed"+myArr[i][0].wind.speed);
+                $("#fcst-day-" + i).children(".humidity").text("Humidity: "+myArr[i][0].main.humidity);
+                $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + myArr[i][0].weather[0].icon + "@2x.png");
+            }
 
             // Figure out the date situation
             // This for loop increased the i index by 8 each time - since we have 40 objects then we will get the 5 days like we were needing
-            for (var i = 0; i < data.list.length; i += 8) {
-                // Date
-                var date = dayjs.unix(data.list[i].dt).format("MMM DD, YYYY");
-                next5days.push(date);
+            // for (var i = 0; i < data.list.length; i += 8) {
+            //     // Date
+            //     var date = dayjs.unix(data.list[i].dt).format("MMM DD, YYYY");
+            //     next5days.push(date);
 
-                // Icon
-                var icon = data.list[i].weather[0].icon;
-                icons.push(icon);
+            //     // Icon
+            //     var icon = data.list[i].weather[0].icon;
+            //     icons.push(icon);
 
-                // Temperature
-                var temp = data.list[i].main.temp;
-                temps.push(temp);
+            //     // Temperature
+            //     var temp = data.list[i].main.temp;
+            //     temps.push(temp);
 
-                //Wind
-                var wind = data.list[i].wind.speed;
-                winds.push(wind);
+            //     //Wind
+            //     var wind = data.list[i].wind.speed;
+            //     winds.push(wind);
 
-                //Humidity
-                var humidity = data.list[i].main.humidity;
-                humidities.push(humidity);
-            }
+            //     //Humidity
+            //     var humidity = data.list[i].main.humidity;
+            //     humidities.push(humidity);
+            // }
 
             // One for loop which can iterate through all of the IDs and use this for all of the details needed in the cards
-            for (var i = 0; i < next5days.length; i++) {
-                $("#fcst-day-" + i).children(".day-header").text(next5days[i]);
-                $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + icons[i] + "@2x.png");
-                $("#fcst-day-" + i).children(".temp").text("Temp: " + temps[i]);
-                $("#fcst-day-" + i).children(".wind").text("Wind Speed: " + winds[i]);
-                $("#fcst-day-" + i).children(".humidity").text("Humidity: " + humidities[i]);
-            }
+            // for (var i = 0; i < next5days.length; i++) {
+            //     $("#fcst-day-" + i).children(".day-header").text(next5days[i]);
+            //     $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + icons[i] + "@2x.png");
+            //     $("#fcst-day-" + i).children(".temp").text("Temp: " + temps[i]);
+            //     $("#fcst-day-" + i).children(".wind").text("Wind Speed: " + winds[i]);
+            //     $("#fcst-day-" + i).children(".humidity").text("Humidity: " + humidities[i]);
+            // }
         })
 }
 
@@ -82,6 +118,8 @@ function createButtons() {
         localStorage.setItem("cities", JSON.stringify(cityArr));
         $("#buttonList").append(cityListEl);
     }
+    $("#clearStorage").attr("style", "display: block");
+ 
 }
 
 $(function () {
@@ -209,6 +247,17 @@ function searchCity(xCity) {
             alert(err);
         })
 }
+
+// Clear storage on button click
+$("#clearStorage").click(function(){
+    cityArr = [];
+    console.log("Clear storage button was clicked");
+    localStorage.clear();
+    createButtons();
+    $("#clearStorage").attr("style", "display: none");
+
+})
+
 
 // if user storage is zero, run for Charlotte
 // if there is existing user storage, pull the last index
