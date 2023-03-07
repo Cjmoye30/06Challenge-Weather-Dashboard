@@ -19,9 +19,7 @@
 <body>
 
     <header>
-        <h1>Cambric's Weather Dashboard</h1>
-        <p>Today's Corporate Buzzword: <span id="motivation"></span></p>
-        <p>Today's Chuck Norris Joke: <span id="chuckQuote"></span></p>
+        <h1>Weather Dashboard</h1>
     </header>
 
     <main>
@@ -29,15 +27,16 @@
 
             <!-- Side Search bar for the user to select a city and then have it stored as a button while utilizing local storage -->
             <div class="row">
-                <div class="col-2 side-navbar mx-1">
+                <div class="side-navbar mx-1">
 
                     <!-- May need to enter a country field selector as well -->
                     <!-- Field to search for a city -->
-                    <h2>Search for a City:</h2>
+                    <h2>Search:</h2>
                     <form id="city-search-form">
                         <input id="city-input" class="form-input" type="text" placeholder="Charlotte">
                         <button id="city-submit" class="btn" type="submit">Search</button>
                     </form>
+                    
                     <hr>
 
                     <!-- Unordered list to keep the buttons of the previously entered cities -->
@@ -45,63 +44,68 @@
                     <p>Recent Searches:</p>
                     <ul id="buttonList">
                     </ul>
-
                     <hr>
                     <button id="clearStorage" class="btn cityButton">Clear Searches</button>
                 </div>
 
-                <div class="col-9">
-                    <div class="row">
-                        <h3 id="city-name">Header for Current City</h3>
-                        <div id="fcst-day-0" class="currentForecast">
-                            <h4 class="day-header"></h4>
-                            <img class="icon" src="" alt="">
-                            <p class="temp"></p>
-                            <p class="wind"></p>
-                            <p class="humidity"></p>
+                <div class="main-display">
+                    <div class="row main-top">
+                            <h3 id="city-name">Header for Current City</h3>
+                            <div id="fcst-day-0" class="currentForecast">
+                                <h4 class="day-header"></h4>
+                                <img class="icon" src="" alt="">
+                                <p class="temp"></p>
+                                <p class="wind"></p>
+                                <p class="humidity"></p>
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="row forecast-5day d-flex justify-content-center">
+                    <div class="row forecast-5day">
+
                         <h4 id="forecast-header">5-Day Forecast:</h4>
-                        <div id="fcst-day-1" class="card col col-12 m-2 ">
+                        <div id="fcst-day-1" class="card">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-2" class="card col col-12 m-2 ">
+                        <div id="fcst-day-2" class="card">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-3" class="card col col-12 m-2 ">
+                        <div id="fcst-day-3" class="card">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-4" class="card col col-12 m-2 ">
+                        <div id="fcst-day-4" class="card">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
-                        <div id="fcst-day-5" class="card col col-12 m-2 ">
+
+                        <div id="fcst-day-5" class="card">
                             <h4 class="day-header"></h4>
                             <img class="icon" src="" alt="">
                             <p class="temp"></p>
                             <p class="wind"></p>
                             <p class="humidity"></p>
                         </div>
+
+
+                        
                     </div>
                 </div>
+
             </div>
         </div>
     </main>

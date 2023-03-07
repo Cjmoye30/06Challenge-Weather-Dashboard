@@ -5,115 +5,74 @@ var temperature = $("#temp")
 
 var cityArr = [];
 var key = "dfc53a3a9ff97d77b6af068616b52dc8&units";
-// var currentDate = dayjs().format("MMM DD, YYYY");
-var currentDate = dayjs().format("YYYY-MM-DD");
 
-console.log(currentDate);
-console.log(dayjs().add(1, "day").format("YYYY-MM-DD"));
 
 function returnUserWeather(lat, lon) {
 
-    // Arrays to store the data for 5-day forecast for the day, temperature, humidity, and wind
-    // Reset the arrays to blank so the info for the new city will be displayed
-    var next5days = [];
-    var icons = [];
-    var temps = [];
-    var winds = [];
-    var humidities = [];
-
-
+    // Refactored the code so that there are no additional arrays.
+    // The data is filtered based on the dates, and then the filtered data is then put into an array which is better/more sensible than increasing the index by 8 each time like I had the data before. This new refactor greatly reduces the amound of code and not that much harder to understand
+    // Each index of the array represents a new day
     fetch("https://api.openweathermap.org/data/2.5/forecast/?lat=" + lat + "&lon=" + lon + "&appid=" + key + "=imperial&cnt=40")
         .then(function (response) {
             return response.json()
         })
         .then(function (data) {
-            console.log(data);
-            console.log(dayjs.unix(data.list[0].dt));
+            // console.log(data);
+            
+            var datesArray = [];
+            var dataArr = [];
 
-            // Filters data down to only the current day and nothing else
-            // same logic can be used for the next 5 days
-            // var daysFilter = data.list.filter(function(day) {
-            //     return day.dt_txt.includes(currentDate);
-            // })
-            // console.log(daysFilter);
-
-            var myArr = [];
-            // Get data for all 6 days individually and put the data into a for loop
-            for (var i = 0; i <=5; i++) {
-                var dayAdd = dayjs().add(i, "day").format("YYYY-MM-DD");
-                var dayData = data.list.filter(function(day) {
-                    return day.dt_txt.includes(dayAdd);
-                })
-                myArr.push(dayData);
+            // Formatting the date text and putting into an array so that we can pull all of the unique values
+            for (var i = 0; i < data.cnt; i++) {
+                datesArray.push(dayjs(data.list[i].dt_txt).format("YYYY-MM-DD"))
             }
-            console.log(myArr);
+            // console.log(datesArray);
 
-            // looping through the newly created array and displaying the content as HTML
-            // console.log(dayjs.unix(myArr[1][1].dt).format("MMMM DD, YYYY"));
+            // Method to pull all of the unique values from the dates we get
+            var uniqueDatesArray = [...new Set(datesArray)];
+            console.log("Unique values:",uniqueDatesArray);
 
-            // Displaying content only for the current day of the selected city
-            // $(".curr-day-header").text(dayjs.unix(myArr[0][0].dt).format("MMMM DD, YYYY"));
-            // $(".curr-icon").attr("src", "http://openweathermap.org/img/wn/" + myArr[0][0].weather[0].icon + "@2x.png");
-            // $(".curr-temp").text("Current Temperature: "+myArr[0][0].main.temp);
-            // $(".curr-wind").text("Current Wind Speed: "+myArr[0][0].wind.speed);
-            // $(".curr-humidity").text("Current Humidity: "+myArr[0][0].main.humidity);
+            for(var i = 0; i < uniqueDatesArray.length; i++) {
+                var dayData2 = data.list.filter(function(day) {
+                    return day.dt_txt.includes(uniqueDatesArray[i])
+                })
+                console.log(dayData2);
+                dataArr.push(dayData2);
+            }
+            
+            // Get data for all 6 days individually and put the data into a for loop
+            // for (var i = 0; i <=5; i++) {
+            //     var dayAdd = dayjs().add(i, "day").format("YYYY-MM-DD");
+            //     var dayData = data.list.filter(function(day) {
+            //         return day.dt_txt.includes(dayAdd);
+            //     })
+            //     // console.log(dayData);
+            //     dataArr.push(dayData);
+            // }
+
+            // The issue is that after a certain time - the data is not pulling correctly and it is reading undefined. I could go back to the MVP code and paste that back in if necessary, but I will try to keep things as is
 
             // Looping through the next 5 days
-            for (var i = 0; i <myArr.length; i++) {
-                $("#fcst-day-" + i).children(".day-header").text(dayjs(myArr[i][0].dt_txt).format("ddd MMM DD, YYYY"));
-                $("#fcst-day-" + i).children(".temp").text("Temperature: "+myArr[i][0].main.temp);
-                $("#fcst-day-" + i).children(".wind").text("Wind Speed"+myArr[i][0].wind.speed);
-                $("#fcst-day-" + i).children(".humidity").text("Humidity: "+myArr[i][0].main.humidity);
-                $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + myArr[i][0].weather[0].icon + "@2x.png");
+            // Pulling data from the first index of each of the arrays so that the data is consistent
+            // There is a potential to expand and include all of the information from these arrays, but that is not required at this moment.
+            for (var i = 0; i <dataArr.length; i++) {
+                $("#fcst-day-" + i).children(".day-header").text(dayjs(dataArr[i][0].dt_txt).format("ddd MMM DD, YYYY"));
+                $("#fcst-day-" + i).children(".temp").text("Temperature: "+dataArr[i][0].main.temp);
+                $("#fcst-day-" + i).children(".wind").text("Wind Speed"+dataArr[i][0].wind.speed);
+                $("#fcst-day-" + i).children(".humidity").text("Humidity: "+dataArr[i][0].main.humidity);
+                $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + dataArr[i][0].weather[0].icon + "@2x.png");
             }
-
-            // Figure out the date situation
-            // This for loop increased the i index by 8 each time - since we have 40 objects then we will get the 5 days like we were needing
-            // for (var i = 0; i < data.list.length; i += 8) {
-            //     // Date
-            //     var date = dayjs.unix(data.list[i].dt).format("MMM DD, YYYY");
-            //     next5days.push(date);
-
-            //     // Icon
-            //     var icon = data.list[i].weather[0].icon;
-            //     icons.push(icon);
-
-            //     // Temperature
-            //     var temp = data.list[i].main.temp;
-            //     temps.push(temp);
-
-            //     //Wind
-            //     var wind = data.list[i].wind.speed;
-            //     winds.push(wind);
-
-            //     //Humidity
-            //     var humidity = data.list[i].main.humidity;
-            //     humidities.push(humidity);
-            // }
-
-            // One for loop which can iterate through all of the IDs and use this for all of the details needed in the cards
-            // for (var i = 0; i < next5days.length; i++) {
-            //     $("#fcst-day-" + i).children(".day-header").text(next5days[i]);
-            //     $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + icons[i] + "@2x.png");
-            //     $("#fcst-day-" + i).children(".temp").text("Temp: " + temps[i]);
-            //     $("#fcst-day-" + i).children(".wind").text("Wind Speed: " + winds[i]);
-            //     $("#fcst-day-" + i).children(".humidity").text("Humidity: " + humidities[i]);
-            // }
         })
 }
 
 function createButtons() {
     $("#buttonList").text("");
     for (var i = 0; i < cityArr.length; i++) {
-        // console.log(cityArr[i]);
         var cityListEl = $("<button>").text(cityArr[i]).attr("class", "btn cityButton");
-
-
         localStorage.setItem("cities", JSON.stringify(cityArr));
         $("#buttonList").append(cityListEl);
     }
     $("#clearStorage").attr("style", "display: block");
- 
 }
 
 $(function () {
@@ -126,11 +85,10 @@ $(function () {
         userCity = e.target.innerHTML;
         console.log(userCity);
         searchCity(userCity);
-
     })
 
     if (localStorage.length === 0) {
-        // run the function on default for Charlotte
+        // run the function on default for Charlotte if no data exists already
         searchCity("Charlotte")
         console.log("Local storae is empty!")
     } else {
@@ -151,16 +109,15 @@ $(function () {
     }
 })
 
+// Running OpenWeather Geolocation
 function handleCitySearch(e) {
     e.preventDefault();
-    // Take the user value and place that into an array - so that we can eventually use the array to create a list of buttons of recent searches
 
     userCity = $("#city-input").val();
-    // Send the user an alert and end the function if a blank city was entered, or if the city already exisits
-    // If none of these condtions returns true, then we proceed to fetch the request with the user city
+
+    // Alret and end function if blank/existing city in storage
     if (userCity === "") {
         alert("Please enter a city!")
-
         return
     } else if (cityArr.includes(userCity)) {
         alert("That city already exists!")
@@ -172,20 +129,17 @@ function handleCitySearch(e) {
             return response.json()
         })
         .then(function (data) {
-            console.log(data);
 
-            cityArr.push(userCity);
-            createButtons();
-
-            console.log(data);
-            city.text(data[0].name + ", " + data[0].state + " - " + data[0].country);
+            // Store lat/lon variables to be used in weather fetch
             var userLat = data[0].lat;
-            console.log("User Latitute: " + userLat);
-
             var userLon = data[0].lon;
-            console.log("User Longitude: " + userLon);
+            
+            city.text(data[0].name + ", " + data[0].state + " - " + data[0].country);
 
-            console.log("City: " + userCity + "\nLatitude: " + userLat + "\nLongitude: " + userLon);
+            // Pushing user data into an array which then goes to local storage for retrival
+            cityArr.push(userCity);
+
+            createButtons();
             returnUserWeather(userLat, userLon);
         })
         .catch(function (err) {
@@ -197,34 +151,6 @@ function handleCitySearch(e) {
 
 var form = $("#city-search-form");
 form.on("submit", handleCitySearch);
-
-
-var corpBuzzWord = $("#motivation");
-function corpBuzzWordGenerate() {
-    fetch('https://corporatebs-generator.sameerkumar.website/')
-        .then(function (response) {
-            return response.json()
-        })
-        .then(function (data) {
-            var test = data;
-            // $("#motivation").text("Today's Corporate Buzzword: " + data.phrase);
-            corpBuzzWord.text(data.phrase);
-        })
-}
-corpBuzzWordGenerate();
-
-var chuckQuote = $("#chuckQuote");
-function chuck() {
-    fetch("https://api.chucknorris.io/jokes/random")
-        .then(function (response) {
-            return response.json()
-        })
-        .then(function (data) {
-            // console.log(data.value);
-            chuckQuote.text(data.value)
-        })
-}
-// chuck();
 
 function searchCity(xCity) {
     userCity = xCity;
