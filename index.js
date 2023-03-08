@@ -14,7 +14,7 @@ function returnUserWeather(lat, lon) {
             return response.json()
         })
         .then(function (data) {
-            
+
             var datesArray = [];
             var dataArr = [];
 
@@ -25,27 +25,27 @@ function returnUserWeather(lat, lon) {
 
             // Method to pull all of the unique values from the dates we get
             var uniqueDatesArray = [...new Set(datesArray)];
-            
+
             // If unique values = 5, hide the display of the last forecast card
             // The data pulled only shows 5 distinct days after a certain time - not sure if there is a possible workaround since we are limited to 40
-            if(uniqueDatesArray.length === 5) {
+            if (uniqueDatesArray.length === 5) {
                 $("#fcst-day-5").attr("style", "display: none")
             }
 
             // Filtering all of the data given based on the unique dates, and placing them into a new data array
-            for(var i = 0; i < uniqueDatesArray.length; i++) {
-                var dayData2 = data.list.filter(function(day) {
+            for (var i = 0; i < uniqueDatesArray.length; i++) {
+                var dayData2 = data.list.filter(function (day) {
                     return day.dt_txt.includes(uniqueDatesArray[i])
                 })
                 dataArr.push(dayData2);
             }
 
             // Looping through the data array and displaying the content in the HTML
-            for (var i = 0; i <dataArr.length; i++) {
+            for (var i = 0; i < dataArr.length; i++) {
                 $("#fcst-day-" + i).children(".day-header").text(dayjs(dataArr[i][0].dt_txt).format("ddd MMM DD, YYYY"));
-                $("#fcst-day-" + i).children(".temp").text("Temperature: "+dataArr[i][0].main.temp);
-                $("#fcst-day-" + i).children(".wind").text("Wind Speed: "+dataArr[i][0].wind.speed);
-                $("#fcst-day-" + i).children(".humidity").text("Humidity: "+dataArr[i][0].main.humidity);
+                $("#fcst-day-" + i).children(".temp").text("Temperature: " + dataArr[i][0].main.temp);
+                $("#fcst-day-" + i).children(".wind").text("Wind Speed: " + dataArr[i][0].wind.speed);
+                $("#fcst-day-" + i).children(".humidity").text("Humidity: " + dataArr[i][0].main.humidity);
                 $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + dataArr[i][0].weather[0].icon + "@2x.png");
             }
         })
@@ -78,7 +78,7 @@ $(function () {
         var storedCities = JSON.parse(localStorage.getItem("cities"));
 
         // On document load - pulling the weather for the last searched city
-        searchCity(storedCities[storedCities.length-1]);
+        searchCity(storedCities[storedCities.length - 1]);
 
         // Reinitialize the cityArray so that the buttons generate on load and do not get replaced with an empty array
         cityArr = JSON.parse(localStorage.getItem("cities"));
@@ -115,7 +115,7 @@ function handleCitySearch(e) {
             // Store lat/lon variables to be used in weather fetch
             var userLat = data[0].lat;
             var userLon = data[0].lon;
-            
+
             // Update the city text
             city.text(data[0].name + ", " + data[0].state + " - " + data[0].country);
 
@@ -151,7 +151,7 @@ function searchCity(xCity) {
 }
 
 // Clear storage on button click
-$("#clearStorage").click(function(){
+$("#clearStorage").click(function () {
     cityArr = [];
     localStorage.clear();
     createButtons();
