@@ -22,7 +22,7 @@
 
 ## Installation / Live Site
 
-[Github Pages Live Site]()
+[Github Pages Live Site](https://cjmoye30.github.io/06Challenge-Weather-Dashboard/)
 
 ## Usage / Screenshot
 
