@@ -46,7 +46,7 @@ function returnUserWeather(lat, lon) {
                 $("#fcst-day-" + i).children(".temp").text("Temperature: " + dataArr[i][0].main.temp);
                 $("#fcst-day-" + i).children(".wind").text("Wind Speed: " + dataArr[i][0].wind.speed);
                 $("#fcst-day-" + i).children(".humidity").text("Humidity: " + dataArr[i][0].main.humidity);
-                $("#fcst-day-" + i).children(".icon").attr("src", "http://openweathermap.org/img/wn/" + dataArr[i][0].weather[0].icon + "@2x.png");
+                $("#fcst-day-" + i).children(".icon").attr("src", "https://openweathermap.org/img/wn/" + dataArr[i][0].weather[0].icon + "@2x.png");
             }
         })
 }
@@ -106,7 +106,7 @@ function handleCitySearch(e) {
         return
     }
 
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
         .then(function (response) {
             return response.json()
         })
@@ -135,7 +135,7 @@ function handleCitySearch(e) {
 function searchCity(xCity) {
     userCity = xCity;
     city.text(userCity);
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + userCity + "&limit=1&appid=" + key)
         .then(function (response) {
             return response.json()
         })
